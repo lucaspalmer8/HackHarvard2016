@@ -3,4 +3,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="alarm_font_size">16sp</dimen>
+    <dimen name="tab_icon_size">70dp</dimen>
 </resources>
