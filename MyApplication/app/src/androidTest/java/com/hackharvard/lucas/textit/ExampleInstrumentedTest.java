@@ -1,4 +1,4 @@
-package com.hackharvard.lucas.nocauseforalarm;
+package com.hackharvard.lucas.textit;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

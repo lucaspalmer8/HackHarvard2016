@@ -1,4 +1,4 @@
-package com.hackharvard.lucas.nocauseforalarm;
+package com.hackharvard.lucas.textit;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

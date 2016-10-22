@@ -1,11 +1,10 @@
-package com.hackharvard.lucas.nocauseforalarm;
+package com.hackharvard.lucas.textit;
 
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,8 +12,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.hackharvard.lucas.textit.DbHelper;
 
 import java.util.List;
 
@@ -32,13 +32,13 @@ public class AlarmActivity extends AppCompatActivity implements DbHelper.DbListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alarm);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(com.hackharvard.lucas.textit.R.layout.activity_alarm);
+        Toolbar toolbar = (Toolbar) findViewById(com.hackharvard.lucas.textit.R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        listContent = (LinearLayout)findViewById(R.id.list_content);
+        listContent = (LinearLayout)findViewById(com.hackharvard.lucas.textit.R.id.list_content);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(com.hackharvard.lucas.textit.R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,10 +64,10 @@ public class AlarmActivity extends AppCompatActivity implements DbHelper.DbListe
         List<Alarm> alarms = dbHelper.getAllAlarms();
         Log.v("Number of alarms", String.valueOf(alarms.size()));
         for (Alarm alarm : alarms) {
-            View root = getLayoutInflater().inflate(R.layout.alarm_item, null);
-            TextView data1 = (TextView)root.findViewById(R.id.data1);
-            TextView data2 = (TextView)root.findViewById(R.id.data2);
-            TextView data3 = (TextView)root.findViewById(R.id.data3);
+            View root = getLayoutInflater().inflate(com.hackharvard.lucas.textit.R.layout.alarm_item, null);
+            TextView data1 = (TextView)root.findViewById(com.hackharvard.lucas.textit.R.id.data1);
+            TextView data2 = (TextView)root.findViewById(com.hackharvard.lucas.textit.R.id.data2);
+            TextView data3 = (TextView)root.findViewById(com.hackharvard.lucas.textit.R.id.data3);
 
             data1.setText(alarm.getDescription());
             data2.setText(alarm.getCreator());
@@ -80,7 +80,7 @@ public class AlarmActivity extends AppCompatActivity implements DbHelper.DbListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_alarm, menu);
+        getMenuInflater().inflate(com.hackharvard.lucas.textit.R.menu.menu_alarm, menu);
         return true;
     }
 
@@ -92,7 +92,7 @@ public class AlarmActivity extends AppCompatActivity implements DbHelper.DbListe
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == com.hackharvard.lucas.textit.R.id.action_settings) {
             return true;
         }
         return super.onOptionsItemSelected(item);
