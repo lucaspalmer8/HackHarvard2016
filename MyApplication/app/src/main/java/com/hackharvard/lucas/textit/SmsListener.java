@@ -1,5 +1,7 @@
 package com.hackharvard.lucas.textit;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -95,6 +97,13 @@ public class SmsListener extends BroadcastReceiver {
                     return;
                 }
                 dbHelper.addAlarm(message, creator, dateFormat.format(date));
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+                Intent alarmIntent = new Intent(context, AlarmListener.class);
+                alarmIntent.setAction("com.hackharvard.lucas.textit.ALARM_FIRED");
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
+
+                alarmManager.set(AlarmManager.RTC_WAKEUP, date.getTime(), pendingIntent);
             }
         }
     }

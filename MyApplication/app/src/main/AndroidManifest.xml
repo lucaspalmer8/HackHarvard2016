@@ -40,6 +40,12 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".AlarmListener" android:exported="false">
+            <intent-filter>
+                <action android:name="com.hackharvard.lucas.textit.ALARM_FIRED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
