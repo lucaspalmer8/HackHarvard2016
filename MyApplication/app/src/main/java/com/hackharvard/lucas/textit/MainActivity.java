@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(com.hackharvard.lucas.textit.R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
         int[] images = {R.layout.alarms, R.layout.contacts, R.layout.settings};
 
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setSelectedTabIndicatorHeight(12);
+        tabLayout.setSelectedTabIndicatorHeight(20);
         tabLayout.setMinimumHeight(3000);
 
-        tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.lightColorPrimary));
+        tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             View view = getLayoutInflater().inflate(images[i], null);
             tabLayout.getTabAt(i).setCustomView(view);
