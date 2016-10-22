@@ -22,7 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
         void onDataChanged();
     }
 
-    List<DbListener> listeners = null;
+    private List<DbListener> listeners = new ArrayList<>();
 
     public static final String DATABASE_NAME = "HackHarvard.db";
     public static final String ALARMS_TABLE_NAME = "alarms";

@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:text="Alphabet Inc."
             android:id="@+id/data1"
-            android:textSize="@dimen/app_bar_height"
+            android:textSize="@dimen/alarm_font_size"
             android:maxLines="1"
             android:ellipsize="end"/>
         <TextView

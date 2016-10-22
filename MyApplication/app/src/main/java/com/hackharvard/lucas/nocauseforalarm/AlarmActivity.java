@@ -1,5 +1,7 @@
 package com.hackharvard.lucas.nocauseforalarm;
 
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,10 +21,11 @@ import java.util.List;
 public class AlarmActivity extends AppCompatActivity implements DbHelper.DbListener {
 
     DbHelper dbHelper;
-    NestedScrollView scrollView;
+    LinearLayout listContent;
 
     @Override
     public void onDataChanged() {
+        Log.v("On Data Set Changed", "Method call");
         loadAlarms();
     }
 
@@ -32,7 +36,7 @@ public class AlarmActivity extends AppCompatActivity implements DbHelper.DbListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        scrollView = (NestedScrollView)findViewById(R.id.list_view);
+        listContent = (LinearLayout)findViewById(R.id.list_content);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -46,10 +50,16 @@ public class AlarmActivity extends AppCompatActivity implements DbHelper.DbListe
         dbHelper = DbHelper.getInstance(this);
         dbHelper.addListener(this);
         loadAlarms();
+
+        Intent intent = new Intent("android.provider.Telephony.SMS_DELIVER");
+        List<ResolveInfo> infos = getPackageManager().queryBroadcastReceivers(intent, 0);
+        for (ResolveInfo info : infos) {
+            System.out.println("Receiver name:" + info.activityInfo.name + "; priority=" + info.priority);
+        }
     }
 
     private void loadAlarms() {
-        scrollView.removeAllViews();
+        listContent.removeAllViews();
 
         List<Alarm> alarms = dbHelper.getAllAlarms();
         Log.v("Number of alarms", String.valueOf(alarms.size()));
@@ -63,7 +73,7 @@ public class AlarmActivity extends AppCompatActivity implements DbHelper.DbListe
             data2.setText(alarm.getCreator());
             data3.setText(alarm.getTime());
 
-            scrollView.addView(root);
+            listContent.addView(root);
         }
     }
 

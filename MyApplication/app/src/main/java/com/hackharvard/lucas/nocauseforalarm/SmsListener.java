@@ -3,6 +3,7 @@ package com.hackharvard.lucas.nocauseforalarm;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
 
@@ -17,6 +18,8 @@ public class SmsListener extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         dbHelper = DbHelper.getInstance(context);
+
+        System.out.println("On REceiveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 
         if (Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(intent.getAction())) {
             for (SmsMessage smsMessage : Telephony.Sms.Intents.getMessagesFromIntent(intent)) {
