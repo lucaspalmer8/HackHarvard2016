@@ -26,19 +26,20 @@ public class DbHelper extends SQLiteOpenHelper {
     private List<DbAlarmListener> alarmListeners = new ArrayList<>();
     private List<DbContactsListener> contactListeners = new ArrayList<>();
 
-    public static final String DATABASE_NAME = "HackHarvard.db";
+    private static final String DATABASE_NAME = "HackHarvard.db";
 
-    public static final String ALARMS_TABLE_NAME = "alarms";
-    public static final String ALARMS_COLUMN_ID = "id";
-    public static final String ALARMS_COLUMN_DESCRIPTION = "description";
-    public static final String ALARMS_COLUMN_CREATOR = "creator";
-    public static final String ALARMS_COLUMN_TIME = "time";
+    private static final String ALARMS_TABLE_NAME = "alarms";
+    private static final String ALARMS_COLUMN_ID = "id";
+    private static final String ALARMS_COLUMN_DESCRIPTION = "description";
+    private static final String ALARMS_COLUMN_CREATOR = "creator";
+    private static final String ALARMS_COLUMN_TIME = "time";
+    private static final String ALARMS_COLUMN_ACTIVE = "active";
 
-    public static final String CONTACTS_TABLE_NAME = "contacts";
-    public static final String CONTACTS_COLUMN_ID = "id";
-    public static final String CONTACTS_COLUMN_NAME = "name";
-    public static final String CONTACTS_COLUMN_NUMBER = "number";
-    public static final String CONTACTS_COLUMN_ALLOW_INPUT_DATA = "allow_input_data";
+    private static final String CONTACTS_TABLE_NAME = "contacts";
+    private static final String CONTACTS_COLUMN_ID = "id";
+    private static final String CONTACTS_COLUMN_NAME = "name";
+    private static final String CONTACTS_COLUMN_NUMBER = "number";
+    private static final String CONTACTS_COLUMN_ALLOW_INPUT_DATA = "allow_input_data";
 
     private static DbHelper instance = null;
 
@@ -78,14 +79,14 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     private DbHelper(Context context) {
-        super(context, DATABASE_NAME , null, 3);
+        super(context, DATABASE_NAME , null, 4);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
                 "create table " + ALARMS_TABLE_NAME +
-                        " (id integer primary key autoincrement, description text, creator text, time text)");
+                        " (id integer primary key autoincrement, description text, creator text, time text, active text)");
         db.execSQL(
                 "create table " + CONTACTS_TABLE_NAME +
                         " (id integer primary key autoincrement, name text, number text, allow_input_data text)");
@@ -98,12 +99,13 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addAlarm(String description, String creator, String time) {
+    public void addAlarm(String description, String creator, String time, String active) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ALARMS_COLUMN_DESCRIPTION, description);
         contentValues.put(ALARMS_COLUMN_CREATOR, creator);
         contentValues.put(ALARMS_COLUMN_TIME, time);
+        contentValues.put(ALARMS_COLUMN_ACTIVE, active);
         db.insert(ALARMS_TABLE_NAME, null, contentValues);
         broadcastAlarmChange();
     }
@@ -136,6 +138,12 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE contacts SET allow_input_data = ? WHERE id = ?",
                 new Object[]{Boolean.toString(allowInputData), Integer.toString(id)});
+    }
+
+    public void updateAlarm(int id, boolean active) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE alarms SET active = ? WHERE id = ?",
+                new Object[]{Boolean.toString(active), Integer.toString(id)});
     }
 
     /*public Cursor getData(int id){
@@ -181,9 +189,11 @@ public class DbHelper extends SQLiteOpenHelper {
         res.moveToFirst();
 
         while(!res.isAfterLast()){
-            Alarm alarm = new Alarm(res.getString(res.getColumnIndex(ALARMS_COLUMN_DESCRIPTION)),
+            Alarm alarm = new Alarm(res.getInt(res.getColumnIndex(ALARMS_COLUMN_ID)),
+                    res.getString(res.getColumnIndex(ALARMS_COLUMN_DESCRIPTION)),
                     res.getString(res.getColumnIndex(ALARMS_COLUMN_CREATOR)),
-                    res.getString(res.getColumnIndex(ALARMS_COLUMN_TIME)));
+                    res.getString(res.getColumnIndex(ALARMS_COLUMN_TIME)),
+                    res.getString(res.getColumnIndex(ALARMS_COLUMN_ACTIVE)));
             array_list.add(alarm);
             res.moveToNext();
         }

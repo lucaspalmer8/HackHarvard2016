@@ -8,7 +8,7 @@ public class Contact {
     private String name;
     private String number;
     private String allowInputData;
-    int id;
+    private int id;
 
     public Contact(int i, String na, String nu, String a) {
         id = i;

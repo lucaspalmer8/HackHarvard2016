@@ -15,25 +15,26 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="0dp"
         android:background="@drawable/alarm_item_background">
-        <TextView
+        <RelativeLayout
+            android:id="@+id/clock_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:id="@+id/circle_item"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignParentLeft="true"
-            android:background="@drawable/circle_item"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:textAlignment="center"
-            android:layout_gravity="center_vertical"
-            android:gravity="center"
-            android:text="H"
-            android:textSize="20sp"/>
+            android:layout_alignParentLeft="true">
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/clock"
+                android:tint="@color/light_gray"/>
+        </RelativeLayout>
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_toRightOf="@id/circle_item"
+            android:layout_toRightOf="@id/clock_icon"
+            android:layout_toLeftOf="@+id/selector_buttons"
             android:layout_alignParentRight="true">
             <TextView
                 android:layout_width="fill_parent"
@@ -60,5 +61,29 @@
                 android:maxLines="1"
                 android:ellipsize="end"/>
         </LinearLayout>
+        <RelativeLayout
+            android:id="@id/selector_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true">
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/add"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/alarm_on"
+                android:tint="@color/light_green"/>
+            <ImageView
+                android:id="@+id/remove"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/alarm_off"
+                android:tint="@color/light_red"/>
+        </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

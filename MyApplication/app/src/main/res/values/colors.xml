@@ -14,6 +14,9 @@
     <color name="light_gray">#c7bbbb</color>
     <color name="gray">#766d6d</color>
 
+    <color name="light_green">#84f781</color>
+    <color name="light_red">#fc6f76</color>
+
     <color name="color1">#ec98d6</color>
     <color name="color2">#f79cb6</color>
     <color name="color3">#b59efa</color>

@@ -73,7 +73,6 @@ public class ContactsFragment extends Fragment implements DbHelper.DbAlarmListen
         for (Contact contact : contacts) {
             View root = getActivity().getLayoutInflater().inflate(R.layout.contact_item, null);
 
-            TextView circeItem = (TextView)root.findViewById(R.id.circle_item);
             TextView data1 = (TextView)root.findViewById(R.id.data1);
             TextView data2 = (TextView)root.findViewById(R.id.data2);
             TextView data3 = (TextView)root.findViewById(R.id.data3);
@@ -111,10 +110,10 @@ public class ContactsFragment extends Fragment implements DbHelper.DbAlarmListen
                 }
             });
 
-            GradientDrawable gradientDrawable = (GradientDrawable)circeItem.getBackground();
+            /*GradientDrawable gradientDrawable = (GradientDrawable)circeItem.getBackground();
             gradientDrawable.setColor(ContextCompat.getColor(getActivity(), AlarmHelper.getColor(contact.getName())));
 
-            circeItem.setText(String.valueOf(contact.getName().charAt(0)));
+            circeItem.setText(String.valueOf(contact.getName().charAt(0)));*/
             data1.setText(contact.getName());
             data2.setText(contact.getNumber());
             data3.setText(contact.getAllowInputData());

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -54,18 +55,46 @@ public class AlarmsFragment extends Fragment implements DbHelper.DbAlarmListener
         for (Alarm alarm : alarms) {
             View root = getActivity().getLayoutInflater().inflate(R.layout.alarm_item, null);
 
-            TextView circeItem = (TextView)root.findViewById(R.id.circle_item);
             TextView data1 = (TextView)root.findViewById(R.id.data1);
             TextView data2 = (TextView)root.findViewById(R.id.data2);
             TextView data3 = (TextView)root.findViewById(R.id.data3);
-
-            GradientDrawable gradientDrawable = (GradientDrawable)circeItem.getBackground();
-            gradientDrawable.setColor(ContextCompat.getColor(getActivity(), AlarmHelper.getColor(alarm.getDescription())));
-
-            circeItem.setText(String.valueOf(alarm.getDescription().charAt(0)));
+            
             data1.setText(alarm.getDescription());
             data2.setText(alarm.getCreator());
             data3.setText(alarm.getTime());
+
+            final ImageView add = (ImageView)root.findViewById(R.id.add);
+            final ImageView remove = (ImageView)root.findViewById(R.id.remove);
+
+            final int id = alarm.getId();
+            boolean allowInputData = Boolean.valueOf(alarm.getActive());
+
+            if (allowInputData) {
+                add.setVisibility(View.VISIBLE);
+                remove.setVisibility(View.GONE);
+            }
+            else {
+                add.setVisibility(View.GONE);
+                remove.setVisibility(View.VISIBLE);
+            }
+
+            add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    add.setVisibility(View.GONE);
+                    remove.setVisibility(View.VISIBLE);
+                    dbHelper.updateAlarm(id, false);
+                }
+            });
+
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    add.setVisibility(View.VISIBLE);
+                    remove.setVisibility(View.GONE);
+                    dbHelper.updateAlarm(id, true);
+                }
+            });
 
             listContent.addView(root);
         }
