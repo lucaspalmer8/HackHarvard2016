@@ -1,8 +1,11 @@
 package com.hackharvard.lucas.textit;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,12 +13,64 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+    private final static int MY_PERMISSIONS_REQUEST = 1;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    completeSetup();
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    private void requestPermissions() {
+        int permission1 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+        int permission2 = ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS);
+
+        List<String> permissionsNeeded = new ArrayList<>();
+        if (permission1 != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.READ_CONTACTS);
+        }
+        if (permission2 != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.RECEIVE_SMS);
+        }
+        if (permissionsNeeded.isEmpty()) {
+            completeSetup();
+        }
+        else {
+            String[] array = new String[permissionsNeeded.size()];
+            for (int i = 0; i < permissionsNeeded.size(); i++) {
+                array[i] = permissionsNeeded.get(i);
+            }
+            ActivityCompat.requestPermissions(this, array, MY_PERMISSIONS_REQUEST);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +80,13 @@ public class MainActivity extends AppCompatActivity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
+
+        requestPermissions();
+    }
+
+    private void completeSetup() {
         final PagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
@@ -49,8 +109,6 @@ public class MainActivity extends AppCompatActivity {
             super(fragmentManager);
         }
 
-        String[] titles = {"Alarms", "Contacts", "Tab3"};
-
         // Returns total number of pages
         @Override
         public int getCount() {
@@ -62,19 +120,14 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new AlarmFragment();
+                    return new AlarmsFragment();
                 case 1:
-                    return new Fragment();
+                    return new ContactsFragment();
                 case 2:
                     return new Fragment();
                 default:
                     return null;
             }
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles[position];
         }
     }
 

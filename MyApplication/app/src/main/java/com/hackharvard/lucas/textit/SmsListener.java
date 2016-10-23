@@ -96,6 +96,14 @@ public class SmsListener extends BroadcastReceiver {
                 if (date.before(new Date())) {
                     return;
                 }
+
+                Contact contact = dbHelper.getContact(creator);
+                if (contact == null || !Boolean.valueOf(contact.getAllowInputData())) {
+                    System.out.println("EHHHHH");
+                    System.out.println(creator);
+                    return;
+                }
+
                 dbHelper.addAlarm(message, creator, dateFormat.format(date));
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 

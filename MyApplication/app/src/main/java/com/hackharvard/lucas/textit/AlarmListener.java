@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 public class AlarmListener extends BroadcastReceiver {
 
+    MediaPlayer mp;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.v(this.getClass().toString(), "On receive called.");
@@ -25,8 +27,8 @@ public class AlarmListener extends BroadcastReceiver {
         Ringtone r = RingtoneManager.getRingtone(context.getApplicationContext(), notification);
         r.play();*/
 
-        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        MediaPlayer mp = MediaPlayer.create(context.getApplicationContext(), notification);
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        mp = MediaPlayer.create(context.getApplicationContext(), notification);
         mp.start();
     }
 }

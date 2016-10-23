@@ -17,7 +17,7 @@ import java.util.List;
  * Created by lucas on 22/10/16.
  */
 
-public class AlarmFragment extends Fragment implements DbHelper.DbListener {
+public class AlarmsFragment extends Fragment implements DbHelper.DbAlarmListener {
     DbHelper dbHelper;
     LinearLayout listContent;
 
@@ -31,7 +31,7 @@ public class AlarmFragment extends Fragment implements DbHelper.DbListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        View view = inflater.inflate(R.layout.content_alarm, null);
+        View view = inflater.inflate(R.layout.alarms_fragment, null);
         listContent = (LinearLayout)view.findViewById(R.id.list_content);
 
         dbHelper = DbHelper.getInstance(container.getContext());
