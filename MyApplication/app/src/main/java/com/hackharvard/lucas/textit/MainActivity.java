@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setSelectedTabIndicatorHeight(20);
+        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white));
         tabLayout.setMinimumHeight(3000);
 
         tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));

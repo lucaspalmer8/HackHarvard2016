@@ -58,7 +58,7 @@ public class AlarmsFragment extends Fragment implements DbHelper.DbAlarmListener
             TextView data1 = (TextView)root.findViewById(R.id.data1);
             TextView data2 = (TextView)root.findViewById(R.id.data2);
             TextView data3 = (TextView)root.findViewById(R.id.data3);
-            
+
             data1.setText(alarm.getDescription());
             data2.setText(alarm.getCreator());
             data3.setText(alarm.getTime());

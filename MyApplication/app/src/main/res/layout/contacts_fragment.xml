@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-    <LinearLayout
-        android:id="@+id/list_content"
-        android:orientation="vertical"
+    android:orientation="vertical">
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </LinearLayout>
-</ScrollView>
+        android:layout_height="4dp"
+        android:background="@drawable/separator_gradient"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+        <LinearLayout
+            android:id="@+id/list_content"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
