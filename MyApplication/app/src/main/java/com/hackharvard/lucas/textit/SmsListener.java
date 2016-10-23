@@ -22,7 +22,8 @@ import java.util.Locale;
 public class SmsListener extends BroadcastReceiver {
 
     private DbHelper dbHelper;
-    private static String KEY_WORD = "textit";
+    private static final String KEY_WORD = "textit";
+    public static final String INTENT_ALARM_ID = "intentAlarmId";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -87,17 +88,21 @@ public class SmsListener extends BroadcastReceiver {
                         return;
                     }
 
-                    dbHelper.addAlarm(message, creator, dateFormat.format(date), "true");
+                    long id = dbHelper.addAlarm(message, creator, dateFormat.format(date), "true");
+                    if (id < 0) {
+                        throw new IllegalStateException("Alarm was not added");
+                    }
                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
                     Intent alarmIntent = new Intent(context, AlarmListener.class);
+                    alarmIntent.putExtra(INTENT_ALARM_ID, id);
                     alarmIntent.setAction("com.hackharvard.lucas.textit.ALARM_FIRED");
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
 
                     alarmManager.set(AlarmManager.RTC_WAKEUP, date.getTime(), pendingIntent);
                 }
                 else if (data[1].toLowerCase().equals("todo")) {
-System.out.println("HEEEE");
+
                     System.out.println(data.length);
                     if (data.length != 3) {
                         return;
@@ -109,11 +114,9 @@ System.out.println("HEEEE");
 
                     Contact contact = dbHelper.getContact(creator);
                     if (contact == null || !Boolean.valueOf(contact.getAllowInputData())) {
-                        System.out.println(contact);
-                        System.out.println(creator);
                         return;
                     }
-System.out.println("Adding it");
+
                     dbHelper.addListItem(message, creator, "true");
                 }
             }

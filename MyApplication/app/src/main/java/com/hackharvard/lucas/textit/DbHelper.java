@@ -2,6 +2,7 @@ package com.hackharvard.lucas.textit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -127,15 +128,16 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addAlarm(String description, String creator, String time, String active) {
+    public long addAlarm(String description, String creator, String time, String active) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ALARMS_COLUMN_DESCRIPTION, description);
         contentValues.put(ALARMS_COLUMN_CREATOR, creator);
         contentValues.put(ALARMS_COLUMN_TIME, time);
         contentValues.put(ALARMS_COLUMN_ACTIVE, active);
-        db.insert(ALARMS_TABLE_NAME, null, contentValues);
+        long id = db.insert(ALARMS_TABLE_NAME, null, contentValues);
         broadcastAlarmChange();
+        return id;
     }
 
     public void addListItem(String description, String creator, String active) {
@@ -277,6 +279,24 @@ public class DbHelper extends SQLiteOpenHelper {
         res.close();
 
         return isThere;
+    }
+
+    public Alarm getAlarm(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery("select * from alarms WHERE id = ?", new String[]{String.valueOf(id)});
+        res.moveToFirst();
+
+        Alarm alarm = null;
+        if(!res.isAfterLast()){
+            alarm = new Alarm(res.getInt(res.getColumnIndex(ALARMS_COLUMN_ID)),
+                    res.getString(res.getColumnIndex(ALARMS_COLUMN_DESCRIPTION)),
+                    res.getString(res.getColumnIndex(ALARMS_COLUMN_CREATOR)),
+                    res.getString(res.getColumnIndex(ALARMS_COLUMN_TIME)),
+                    res.getString(res.getColumnIndex(ALARMS_COLUMN_ACTIVE)));
+        }
+
+        res.close();
+        return alarm;
     }
 
     public Contact getContact(String number) {

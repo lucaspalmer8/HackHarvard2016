@@ -17,11 +17,21 @@ import android.widget.Toast;
 public class AlarmListener extends BroadcastReceiver {
 
     MediaPlayer mp;
+    private DbHelper dbHelper;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.v(this.getClass().toString(), "On receive called.");
-        Toast.makeText(context, "Alarm Alarm Alarm", Toast.LENGTH_SHORT).show();
+
+        dbHelper = DbHelper.getInstance(context);
+        long id = intent.getExtras().getLong(SmsListener.INTENT_ALARM_ID);
+
+        Alarm alarm = dbHelper.getAlarm(id);
+        if (alarm == null || !Boolean.valueOf(alarm.getActive())) {
+            return;
+        }
+
+        Toast.makeText(context, "Alarm Alarm Alarm!", Toast.LENGTH_SHORT).show();
 
         /*Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         Ringtone r = RingtoneManager.getRingtone(context.getApplicationContext(), notification);
