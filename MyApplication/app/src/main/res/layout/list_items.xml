@@ -9,6 +9,6 @@
         android:layout_height="@dimen/tab_icon_size"
         android:padding="10dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/lock">
+        android:src="@drawable/list">
     </ImageView>
 </RelativeLayout>

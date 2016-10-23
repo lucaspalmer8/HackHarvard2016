@@ -34,8 +34,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_toRightOf="@id/phone_icon"
-            android:layout_toLeftOf="@+id/selector_buttons"
-            android:layout_alignParentRight="true">
+            android:layout_toLeftOf="@+id/selector_buttons">
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -75,7 +74,7 @@
                 android:layout_height="45dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:src="@drawable/add"
+                android:src="@drawable/lock_open"
                 android:tint="@color/light_green"/>
             <ImageView
                 android:id="@+id/remove"
@@ -83,7 +82,7 @@
                 android:layout_height="45dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:src="@drawable/remove"
+                android:src="@drawable/lock"
                 android:tint="@color/light_red"/>
         </RelativeLayout>
     </RelativeLayout>

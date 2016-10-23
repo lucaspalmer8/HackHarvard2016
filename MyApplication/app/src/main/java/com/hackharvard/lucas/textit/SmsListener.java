@@ -36,7 +36,7 @@ public class SmsListener extends BroadcastReceiver {
                 String creator = smsMessage.getDisplayOriginatingAddress();
 
                 String[] data = messageBody.split("/");
-                if (data.length != 8) {
+                if (data.length < 2) {
                     return;
                 }
 
@@ -44,72 +44,78 @@ public class SmsListener extends BroadcastReceiver {
                     data[i] = data[i].trim();
                 }
 
-                String keyword = data[0];
-                String monthString = data[1];
-                String dayString = data[2];
-                String yearString = data[3];
-                String hourString = data[4];
-                String minuteString = data[5];
-                String noon = data[6];
-                String message = data[7];
-
-                if (!keyword.toLowerCase().equals(KEY_WORD)) {
+                if (!data[0].toLowerCase().equals(KEY_WORD)) {
                     return;
                 }
 
-                /*if (!noon.equals("am") && !noon.equals("pm")) {
-                    return;
-                }*/
+                //alarm case
+                if (data[1].toLowerCase().equals("alarm")) {
 
-                /*int month;
-                int day;
-                int year;
-                int hour;
-                int minute;
+                    if (data.length != 9) {
+                        return;
+                    }
 
-                try {
-                    month = Integer.parseInt(monthString);
-                    day = Integer.parseInt(dayString);
-                    year = Integer.parseInt(yearString);
-                    hour = Integer.parseInt(hourString);
-                    minute = Integer.parseInt(minuteString);
+                    String keyword = data[0];
+                    String item = data[1];
+                    String monthString = data[2];
+                    String dayString = data[3];
+                    String yearString = data[4];
+                    String hourString = data[5];
+                    String minuteString = data[6];
+                    String noon = data[7];
+                    String message = data[8];
 
+                    String format = "M/d/y/h/m/a";
+                    String dateString = monthString + "/" + dayString + "/" + yearString + "/" +
+                            hourString + "/" + minuteString + "/" + noon;
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.CANADA);
+                    dateFormat.setLenient(false);
+                    Date date = null;
+                    try {
+                        date = dateFormat.parse(dateString);
+                    } catch (Exception ex) {
+                        return;
+                    }
+
+                    if (date.before(new Date())) {
+                        return;
+                    }
+
+                    Contact contact = dbHelper.getContact(creator);
+                    if (contact == null || !Boolean.valueOf(contact.getAllowInputData())) {
+                        return;
+                    }
+
+                    dbHelper.addAlarm(message, creator, dateFormat.format(date), "true");
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+                    Intent alarmIntent = new Intent(context, AlarmListener.class);
+                    alarmIntent.setAction("com.hackharvard.lucas.textit.ALARM_FIRED");
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
+
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, date.getTime(), pendingIntent);
                 }
-                catch (NumberFormatException ex) {
-                    return;
-                }*/
+                else if (data[1].toLowerCase().equals("todo")) {
+System.out.println("HEEEE");
+                    System.out.println(data.length);
+                    if (data.length != 3) {
+                        return;
+                    }
 
-                String format = "M/d/y/h/m/a";
-                String dateString = monthString + "/" + dayString + "/" + yearString + "/" +
-                        hourString + "/" + minuteString + "/" + noon;
+                    String keyword = data[0];
+                    String item = data[1];
+                    String message = data[2];
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.CANADA);
-                dateFormat.setLenient(false);
-                Date date = null;
-                try {
-                    date = dateFormat.parse(dateString);
+                    Contact contact = dbHelper.getContact(creator);
+                    if (contact == null || !Boolean.valueOf(contact.getAllowInputData())) {
+                        System.out.println(contact);
+                        System.out.println(creator);
+                        return;
+                    }
+System.out.println("Adding it");
+                    dbHelper.addListItem(message, creator, "true");
                 }
-                catch (Exception ex) {
-                    return;
-                }
-
-                if (date.before(new Date())) {
-                    return;
-                }
-
-                Contact contact = dbHelper.getContact(creator);
-                if (contact == null || !Boolean.valueOf(contact.getAllowInputData())) {
-                    return;
-                }
-
-                dbHelper.addAlarm(message, creator, dateFormat.format(date), "true");
-                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-                Intent alarmIntent = new Intent(context, AlarmListener.class);
-                alarmIntent.setAction("com.hackharvard.lucas.textit.ALARM_FIRED");
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
-
-                alarmManager.set(AlarmManager.RTC_WAKEUP, date.getTime(), pendingIntent);
             }
         }
     }

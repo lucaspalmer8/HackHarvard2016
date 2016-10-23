@@ -1,7 +1,6 @@
 package com.hackharvard.lucas.textit;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         final PagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
-        int[] images = {R.layout.alarms, R.layout.contacts, R.layout.settings};
+        int[] images = {R.layout.alarms, R.layout.list_items, R.layout.contacts};
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setSelectedTabIndicatorHeight(20);
@@ -123,9 +122,9 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return new AlarmsFragment();
                 case 1:
-                    return new ContactsFragment();
+                    return new ListItemFragment();
                 case 2:
-                    return new Fragment();
+                    return new ContactsFragment();
                 default:
                     return null;
             }

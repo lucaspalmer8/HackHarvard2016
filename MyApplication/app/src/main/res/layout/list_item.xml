@@ -26,7 +26,7 @@
                 android:layout_height="45dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:src="@drawable/music"
+                android:src="@drawable/label"
                 android:tint="@color/light_gray"/>
         </RelativeLayout>
         <LinearLayout
@@ -52,6 +52,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"/>
             <TextView
+                android:visibility="gone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="$100"
@@ -73,7 +74,7 @@
                 android:layout_height="45dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:src="@drawable/alarm_on"
+                android:src="@drawable/add"
                 android:tint="@color/light_green"/>
             <ImageView
                 android:id="@+id/remove"
@@ -81,7 +82,7 @@
                 android:layout_height="45dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:src="@drawable/alarm_off"
+                android:src="@drawable/remove"
                 android:tint="@color/light_red"/>
         </RelativeLayout>
     </RelativeLayout>

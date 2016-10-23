@@ -15,6 +15,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class DbHelper extends SQLiteOpenHelper {
 
+    public interface DbListItemListener {
+        void onDataChanged();
+    }
+
     public interface DbAlarmListener {
         void onDataChanged();
     }
@@ -25,6 +29,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private List<DbAlarmListener> alarmListeners = new ArrayList<>();
     private List<DbContactsListener> contactListeners = new ArrayList<>();
+    private List<DbListItemListener> listItemListeners = new ArrayList<>();
 
     private static final String DATABASE_NAME = "HackHarvard.db";
 
@@ -40,6 +45,12 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String CONTACTS_COLUMN_NAME = "name";
     private static final String CONTACTS_COLUMN_NUMBER = "number";
     private static final String CONTACTS_COLUMN_ALLOW_INPUT_DATA = "allow_input_data";
+
+    private static final String LIST_ITEM_TABLE_NAME = "list_items";
+    private static final String LIST_ITEM_COLUMN_ID = "id";
+    private static final String LIST_ITEM_COLUMN_DESCRIPTION = "description";
+    private static final String LIST_ITEM_COLUMN_CREATOR = "creator";
+    private static final String LIST_ITEM_COLUMN_ACTIVE = "active";
 
     private static DbHelper instance = null;
 
@@ -62,12 +73,22 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
+    private void broadcastListItemChange() {
+        for (DbListItemListener listener : listItemListeners) {
+            listener.onDataChanged();
+        }
+    }
+
     public void addListener(DbAlarmListener listener) {
         alarmListeners.add(listener);
     }
 
     public void addListener(DbContactsListener listener) {
         contactListeners.add(listener);
+    }
+
+    public void addListener(DbListItemListener listener) {
+        listItemListeners.add(listener);
     }
 
     //TODO: call these when views destroyed?
@@ -77,9 +98,12 @@ public class DbHelper extends SQLiteOpenHelper {
     public void removeListener(DbContactsListener listener) {
         contactListeners.remove(listener);
     }
+    public void removeListener(DbListItemListener listener) {
+        listItemListeners.remove(listener);
+    }
 
     private DbHelper(Context context) {
-        super(context, DATABASE_NAME , null, 4);
+        super(context, DATABASE_NAME , null, 5);
     }
 
     @Override
@@ -90,12 +114,16 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "create table " + CONTACTS_TABLE_NAME +
                         " (id integer primary key autoincrement, name text, number text, allow_input_data text)");
+        db.execSQL(
+                "create table " + LIST_ITEM_TABLE_NAME +
+                        " (id integer primary key autoincrement, description text, creator text, active text)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS alarms");
         db.execSQL("DROP TABLE IF EXISTS contacts");
+        db.execSQL("DROP TABLE IF EXISTS list_items");
         onCreate(db);
     }
 
@@ -108,6 +136,16 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put(ALARMS_COLUMN_ACTIVE, active);
         db.insert(ALARMS_TABLE_NAME, null, contentValues);
         broadcastAlarmChange();
+    }
+
+    public void addListItem(String description, String creator, String active) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(LIST_ITEM_COLUMN_DESCRIPTION, description);
+        contentValues.put(LIST_ITEM_COLUMN_CREATOR, creator);
+        contentValues.put(LIST_ITEM_COLUMN_ACTIVE, active);
+        db.insert(LIST_ITEM_TABLE_NAME, null, contentValues);
+        broadcastListItemChange();
     }
 
     /**
@@ -143,6 +181,12 @@ public class DbHelper extends SQLiteOpenHelper {
     public void updateAlarm(int id, boolean active) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE alarms SET active = ? WHERE id = ?",
+                new Object[]{Boolean.toString(active), Integer.toString(id)});
+    }
+
+    public void updateListItem(int id, boolean active) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE list_items SET active = ? WHERE id = ?",
                 new Object[]{Boolean.toString(active), Integer.toString(id)});
     }
 
@@ -183,7 +227,6 @@ public class DbHelper extends SQLiteOpenHelper {
     public ArrayList<Alarm> getAllAlarms() {
         ArrayList<Alarm> array_list = new ArrayList<>();
 
-        //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery("select * from " + ALARMS_TABLE_NAME, null);
         res.moveToFirst();
@@ -195,6 +238,26 @@ public class DbHelper extends SQLiteOpenHelper {
                     res.getString(res.getColumnIndex(ALARMS_COLUMN_TIME)),
                     res.getString(res.getColumnIndex(ALARMS_COLUMN_ACTIVE)));
             array_list.add(alarm);
+            res.moveToNext();
+        }
+
+        res.close();
+        return array_list;
+    }
+
+    public ArrayList<ListItem> getAllListItems() {
+        ArrayList<ListItem> array_list = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery("select * from " + LIST_ITEM_TABLE_NAME, null);
+        res.moveToFirst();
+
+        while(!res.isAfterLast()){
+            ListItem listItem = new ListItem(res.getInt(res.getColumnIndex(LIST_ITEM_COLUMN_ID)),
+                    res.getString(res.getColumnIndex(LIST_ITEM_COLUMN_DESCRIPTION)),
+                    res.getString(res.getColumnIndex(LIST_ITEM_COLUMN_CREATOR)),
+                    res.getString(res.getColumnIndex(LIST_ITEM_COLUMN_ACTIVE)));
+            array_list.add(listItem);
             res.moveToNext();
         }
 
