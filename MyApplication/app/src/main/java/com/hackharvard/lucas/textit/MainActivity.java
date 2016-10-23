@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setSelectedTabIndicatorHeight(20);
         tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.white));
-        tabLayout.setMinimumHeight(3000);
 
         tabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
@@ -122,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return new AlarmsFragment();
                 case 1:
-                    return new ListItemFragment();
+                    return new ListItemsFragment();
                 case 2:
                     return new ContactsFragment();
                 default:

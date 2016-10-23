@@ -52,7 +52,7 @@ public class AlarmsFragment extends Fragment implements DbHelper.DbAlarmListener
 
         List<Alarm> alarms = dbHelper.getAllAlarms();
         Log.v("Number of alarms", String.valueOf(alarms.size()));
-        for (Alarm alarm : alarms) {
+        for (final Alarm alarm : alarms) {
             View root = getActivity().getLayoutInflater().inflate(R.layout.alarm_item, null);
 
             TextView data1 = (TextView)root.findViewById(R.id.data1);
@@ -93,6 +93,14 @@ public class AlarmsFragment extends Fragment implements DbHelper.DbAlarmListener
                     add.setVisibility(View.VISIBLE);
                     remove.setVisibility(View.GONE);
                     dbHelper.updateAlarm(id, true);
+                }
+            });
+
+            root.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    dbHelper.deleteAlarm(alarm.getId());
+                    return true;
                 }
             });
 

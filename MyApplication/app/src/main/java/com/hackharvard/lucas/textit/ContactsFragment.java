@@ -20,7 +20,7 @@ import java.util.List;
  * Created by lucas on 22/10/16.
  */
 
-public class ContactsFragment extends Fragment implements DbHelper.DbAlarmListener {
+public class ContactsFragment extends Fragment implements DbHelper.DbContactsListener {
     DbHelper dbHelper;
     LinearLayout listContent;
 

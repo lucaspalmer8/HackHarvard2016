@@ -219,10 +219,15 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public Integer deleteAlarm(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Integer i = db.delete("contacts",
-                "id = ? ",
-                new String[] { Integer.toString(id) });
+        Integer i = db.delete("alarms", "id = ? ", new String[] { Integer.toString(id) });
         broadcastAlarmChange();
+        return i;
+    }
+
+    public Integer deleteListItem(Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Integer i = db.delete("list_items", "id = ? ", new String[] { Integer.toString(id) });
+        broadcastListItemChange();
         return i;
     }
 

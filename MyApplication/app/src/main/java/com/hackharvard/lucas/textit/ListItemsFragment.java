@@ -18,7 +18,7 @@ import java.util.List;
  * Created by lucas on 22/10/16.
  */
 
-public class ListItemFragment extends Fragment implements DbHelper.DbListItemListener {
+public class ListItemsFragment extends Fragment implements DbHelper.DbListItemListener {
     DbHelper dbHelper;
     LinearLayout listContent;
 
@@ -47,7 +47,7 @@ public class ListItemFragment extends Fragment implements DbHelper.DbListItemLis
 
         List<ListItem> listItems = dbHelper.getAllListItems();
         Log.v("Number of alarms", String.valueOf(listItems.size()));
-        for (ListItem listItem : listItems) {
+        for (final ListItem listItem : listItems) {
             View root = getActivity().getLayoutInflater().inflate(R.layout.list_item, null);
 
             TextView data1 = (TextView)root.findViewById(R.id.data1);
@@ -88,6 +88,14 @@ public class ListItemFragment extends Fragment implements DbHelper.DbListItemLis
                     add.setVisibility(View.VISIBLE);
                     remove.setVisibility(View.GONE);
                     dbHelper.updateListItem(id, true);
+                }
+            });
+
+            root.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    dbHelper.deleteListItem(listItem.getId());
+                    return true;
                 }
             });
 
