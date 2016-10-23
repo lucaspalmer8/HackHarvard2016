@@ -18,7 +18,7 @@ import java.util.List;
  * Created by lucas on 22/10/16.
  */
 
-public class ListItemFragment extends Fragment implements DbHelper.DbAlarmListener {
+public class ListItemFragment extends Fragment implements DbHelper.DbListItemListener {
     DbHelper dbHelper;
     LinearLayout listContent;
 

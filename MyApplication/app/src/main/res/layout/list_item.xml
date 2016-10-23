@@ -26,7 +26,7 @@
                 android:layout_height="45dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:src="@drawable/label"
+                android:src="@drawable/pencil"
                 android:tint="@color/light_gray"/>
         </RelativeLayout>
         <LinearLayout
